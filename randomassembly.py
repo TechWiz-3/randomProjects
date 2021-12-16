@@ -9,6 +9,7 @@ thirdElement = []
 
 print("Enter first elements, when done press enter")
 addfirstElement = str(input("Enter the first element: "))
+firstElement.append(addfirstElement)
 while addfirstElement != "":
     addfirstElement = str(input("Enter a first element: "))
     if addfirstElement != "":
@@ -16,6 +17,7 @@ while addfirstElement != "":
 
 print("Enter second elements, when done press enter")
 addsecondElement = str(input("Enter the second element: "))
+thirdElement.append(addsecondElement)
 while addsecondElement != "":
     addsecondElement = str(input("Enter the second element: "))
     if addsecondElement != "":
@@ -25,5 +27,36 @@ for first in firstElement:
     for magic in theMagic:
         for third in thirdElement:
             print(f'{first} {magic} {third}')
+
+counter = 0
+print("Now for the first element combinations")
+for glue in theMagic:
+    counter = 0
+    for item in firstElement:
+        for secondIteration in firstElement:
+            try:
+                if item == firstElement[counter]:
+                    pass
+                else:
+                    print(f'{item} {glue} {firstElement[counter]}')
+                counter+=1
+            except:
+                pass
+
+print("Now for the second element combinations")
+for magic in theMagic:
+    counter = 0
+    for item in thirdElement:
+        for secondIteration in thirdElement:
+            try:
+                if item == thirdElement[counter]:
+                     pass
+                else:
+                    print(f'{item} {magic} {thirdElement[counter]}')
+                counter+=1
+            except:
+                pass
+                
+            
 
 #PS: yes i know this is terrible code ok
