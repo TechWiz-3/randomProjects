@@ -14,6 +14,7 @@ mydb = mysql.connector.connect(
 )
 
 mycursor = mydb.cursor()
+mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user")
 # mycursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
 # mycursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 # sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
