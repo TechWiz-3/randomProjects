@@ -35,26 +35,30 @@ mycursor = mydb.cursor()
 # mydb.commit()
 # # mycursor.execute()
 # mycursor.execute("CREATE TABLE how_often_2 (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
-person = "ZactheWise1235"
-time = 10
-finalValues = (person, time)
-print(finalValues)
-sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
-mycursor.execute(sql, finalValues)
-mydb.commit()
+# person = "ZactheWise1235"
+# time = 10
+# finalValues = (person, time)
+# print(finalValues)
+# sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+# mycursor.execute(sql, finalValues)
+# mydb.commit()
 
-person = "ZacTheWise2#8449"
-time = 22
-finalValues = (person, time)
-sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
-mycursor.execute(sql, finalValues)
-mydb.commit()
+# person = "ZacTheWise2#8449"
+# time = 22
+# finalValues = (person, time)
+# sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+# mycursor.execute(sql, finalValues)
+# mydb.commit()
 
 
-mycursor.execute("SELECT * FROM how_often_2")
+# mycursor.execute("SELECT * FROM how_often_2")
 
-for entry in mycursor:
-  print(entry)
+# for entry in mycursor:
+#   print(entry)
+
   # if "ZacTheWise#1234" in entry:
   #   print("")
 
+mycursor.execute("SELECT * FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
+for x in mycursor:
+  print(x)
