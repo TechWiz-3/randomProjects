@@ -14,7 +14,7 @@ mydb = mysql.connector.connect(
 )
 
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user")
+# mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY goals;")
 # mycursor.execute("CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
 # mycursor.execute("ALTER TABLE customers ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY")
 # sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
@@ -25,7 +25,7 @@ mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user")
 
 # print(mycursor.rowcount, "record inserted.")
 
-# mycursor.execute("CREATE TABLE test_goals_2002 (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), goals VARCHAR(255))")
+#mycursor.execute("CREATE TABLE how_often (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days VARCHAR(255))")
 # person = "ctx.user"
 # goal = input("What's your new years goal: ")
 # finalValues = (person, goal)
@@ -34,4 +34,6 @@ mycursor.execute("SELECT * FROM test_goals_2002 ORDER BY user")
 # mycursor.execute(sql, finalValues)
 # mydb.commit()
 # # mycursor.execute()
+mycursor.execute("CREATE TABLE how_often (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+
 
