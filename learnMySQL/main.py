@@ -34,6 +34,25 @@ mycursor = mydb.cursor()
 # mycursor.execute(sql, finalValues)
 # mydb.commit()
 # # mycursor.execute()
-mycursor.execute("CREATE TABLE how_often (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+# mycursor.execute("CREATE TABLE how_often_2 (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+person = "ZactheWise1234"
+time = 12
+finalValues = (person, time)
+print(finalValues)
+sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+mycursor.execute(sql, finalValues)
 
+person = "ZacTheWise2#8949"
+time = 20
+finalValues = (person, time)
+sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
+mycursor.execute(sql, finalValues)
+
+
+mycursor.execute("SELECT * FROM how_often_2")
+
+for entry in mycursor:
+  print(entry)
+  # if "ZacTheWise#1234" in entry:
+  #   print("")
 
