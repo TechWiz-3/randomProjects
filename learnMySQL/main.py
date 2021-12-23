@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from typing import final
 
 load_dotenv()
 password = os.getenv("password")
@@ -59,6 +60,9 @@ mycursor = mydb.cursor()
   # if "ZacTheWise#1234" in entry:
   #   print("")
 
+
+final = ""
 mycursor.execute("SELECT * FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
 for x in mycursor:
-  print(x)
+  final += str(x)
+print(final)
