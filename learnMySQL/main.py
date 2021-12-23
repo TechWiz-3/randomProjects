@@ -47,6 +47,7 @@ time = 20
 finalValues = (person, time)
 sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
 mycursor.execute(sql, finalValues)
+mydb.commit()
 
 
 mycursor.execute("SELECT * FROM how_often_2")
