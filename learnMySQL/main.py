@@ -35,15 +35,16 @@ mycursor = mydb.cursor()
 # mydb.commit()
 # # mycursor.execute()
 # mycursor.execute("CREATE TABLE how_often_2 (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
-person = "ZactheWise1234"
-time = 12
+person = "ZactheWise1235"
+time = 10
 finalValues = (person, time)
 print(finalValues)
 sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
 mycursor.execute(sql, finalValues)
+mydb.commit()
 
-person = "ZacTheWise2#8949"
-time = 20
+person = "ZacTheWise2#8449"
+time = 22
 finalValues = (person, time)
 sql = "INSERT INTO how_often_2 (user, days) VALUES (%s, %s)"
 mycursor.execute(sql, finalValues)
