@@ -61,8 +61,10 @@ mycursor = mydb.cursor()
   #   print("")
 
 
-final = ""
-mycursor.execute("SELECT * FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
-for x in mycursor:
-  final += str(x)
-print(final)
+# final = ""
+# mycursor.execute("SELECT * FROM test_goals_2002 WHERE user = 'Zac the Wise\#1381'")
+# for x in mycursor:
+#   final += str(x)
+# print(final)
+
+mycursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), goals VARCHAR(255), status BOOL)")
