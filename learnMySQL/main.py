@@ -69,4 +69,5 @@ print("Hellow world")
 #   final += str(x)
 # print(final)
 
-mycursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), goals VARCHAR(255), status BOOL)")
+# mycursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), goals VARCHAR(255), status BOOL)")
+mycursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
