@@ -70,4 +70,8 @@ print("Hellow world")
 # print(final)
 
 # mycursor.execute("CREATE TABLE 2022_Goals (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), goals VARCHAR(255), status BOOL)")
-mycursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+# mycursor.execute("CREATE TABLE reminders (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+
+# mycursor.execute("CREATE TABLE nextDate (id INT AUTO_INCREMENT PRIMARY KEY, user VARCHAR(255), days SMALLINT UNSIGNED)")
+
+mycursor.execute("CREATE TABLE reminderChannel (id INT AUTO_INCREMENT PRIMARY KEY, serverId BIGINT(255) UNSIGNED, channelID BIGINT(255) UNSIGNED)")
