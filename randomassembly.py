@@ -3,6 +3,9 @@
 
 #firstElement = ["fence", "windmill", "shadehouse", "animal shelter", "trellis", "mounds", "compost heaps", "plants", "ducks", "windbreak"]
 #thirdElement = ["hosue", "storage box", "yard or compound", "ponds", "tanks", "canals", "swales", "chickens", "fish", "barn"]
+
+import time
+
 firstElement = []
 theMagic = ["attached to", "beside", "around", "over", "in", "on", "under", "containing"]
 thirdElement = []
@@ -27,6 +30,7 @@ for first in firstElement:
     for magic in theMagic:
         for third in thirdElement:
             print(f'{first} {magic} {third}')
+            time.sleep(.2)
 
 counter = 0
 print("Now for the first element combinations")
@@ -39,6 +43,7 @@ for glue in theMagic:
                     pass
                 else:
                     print(f'{item} {glue} {firstElement[counter]}')
+                    time.sleep(.1)
                 counter+=1
             except:
                 pass
@@ -53,6 +58,7 @@ for magic in theMagic:
                      pass
                 else:
                     print(f'{item} {magic} {thirdElement[counter]}')
+                    time.sleep(.1)
                 counter+=1
             except:
                 pass
