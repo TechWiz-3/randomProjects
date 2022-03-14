@@ -1,0 +1,11 @@
+# print("Number\tSquare\n--------------")
+# for i in range(1, 11):
+#     print(f"{i}\t{i**2}")
+
+end_limit = int(input("How far up shall we go?"))
+end_limit += 1 
+
+for i in range(0,end_limit,2):
+    if i == 0:
+        continue
+    print(i)
