@@ -13,9 +13,11 @@ Global variables: logs[]
 
 # Imports
 
-from socket import inet_aton as valid_ipv4
+from socket import inet_aton as valid_ipv4, gethostbyname, AF_INET, SOCK_STREAM, setdefaulttimeout, socket
+import pyfiglet as ascii_text
 from datetime import datetime
 import syslog
+from os import system
 
 # Function for writing to log file
 def log(payload):
@@ -54,7 +56,9 @@ def enter_ip():
             third_octet <= 255
         ):
             print("Provided IP address has the correct number of octets and the correct octet values") # ip address valid
-            return f"{first_octet}.{second_octet}.{third_octet}" # return the network address and exit function
+
+            return calculate_range(f"{first_octet}.{second_octet}.{third_octet}") # calculate (and scan) the ip range and exit function
+        
         print("IP address range not valid, try again") # notifies user
         enter_ip() # calls the function again
     # runs if wrong number of octets entered
@@ -80,20 +84,69 @@ def enter_subnet():
 def calculate_range(network_ip):
     counter = 0
     # loop through odd numbers
-    for last_octet in range(256, 1, -2): # starts at 256, goes down till 1, goes down by 2
+    for last_octet in range(255, 1, -2): # starts at 255, goes down till 1, goes down by 2
+                                         # (255 not counted due to being broadcast addr)
         counter += 1
         if counter <= 10: # first 10 ips reserved for printers and servers
             pass
         else:
-            scan_host(network_ip, last_octet)
+            full_ip = f"{network_ip}.{last_octet}"
+            if host_up(full_ip): # if the host is up
+                pass
+                #scan_ports(network_ip, last_octet) # scan ports
 
-def scan_host(network_ip, host_ip):
-    print(f"{network_ip}.{host_ip}")
+def host_up(full_addr: str): # function to determine if a host is up
+    # returns true or false if the host is up or not
+    # checks if host can be pinged
+    if system("ping -c 1 " + full_addr) == 0: # if host responds when pinged
+        print("Host is up")
+        return True
+    else: # ping failed, either host is down or has blocked pings
+        # try on http port
+        print("Ping failed, port connection attempt in progress")
+        port = 80
+    
+        s = socket(AF_INET, SOCK_STREAM)
+        setdefaulttimeout(1)   
+        # returns an error indicator
+        print(f"Connecting to {full_addr}:{port}")
+        result = s.connect((full_addr,port))
+        if result == None:
+            print("Host is down")
+            return False
+        elif result == 0:
+            print(f"Port {port} is open")
+            s.close()
+            return True
+    return False
 
+def scan_ports(network_ip, host_ip):
+    target = f"{network_ip}.{host_ip}" # defines target ip address to scan
+    print(target)
+    for port in range(60000):
+        print(port)
+        try:
+            target = gethostbyname(target)
+        except Exception as error:
+            print(f"Error occurred\n{error}")
+        else:
+            print("Host name retrieved succesfully")
+        
+        print(f"Connecting to {target}:{port}")
+        s = socket(AF_INET, SOCK_STREAM)
+        setdefaulttimeout(1)   
+        # returns an error indicator
+        result = s.connect_ex((target,port))
+        if result == 0:
+            print(f"Port {port} is open")
+        s.close()
+    
 
-# 
+banner = ascii_text.figlet_format("ROI PORT SCANNER")
+print(banner)
+
+enter_ip()
 # enter_subnet()
-calculate_range(enter_ip())
 
 
 global logs 
