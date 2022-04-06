@@ -119,19 +119,12 @@ def scan_ports(network_ip, host_ip):
             # returns an error indicator
             result = s.connect_ex((target,port))
             if result == 0:
-                #print(f"[+] Port {port} is open")
                 time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
                 log_payload = f"IP: {target}:{port} OPEN {time}"
                 log(log_payload)
-            elif result == 61:  # ECONNREFUSED Code: 61
-                print(f"[-] Port {port} is closed")
+            else:
                 time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
                 log_payload = f"IP: {target}:{port} CLOSED {time}"
-                log(log_payload)
-            else:
-                print(f"[/] Error connecting to socket {target}:{port}")
-                time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
-                log_payload = f"IP: {target}:{port} ERROR({result}) {time}"
                 log(log_payload)
             s.close()
 
