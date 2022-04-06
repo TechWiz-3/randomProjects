@@ -6,6 +6,7 @@
 # Version (numbered starting 1.0.1)
 # Status (set initially to 'development') 
 # An overview of the script's logic
+# like the main file but without the endless host scanning
 
 """
 Global variables: logs[], overwrite_ip_target (for testing)
@@ -33,6 +34,7 @@ logs = []  # list used for storing logs
 def log(payload):
     """Function for logging events as required"""
     logs.append(payload)  # adds the payload to the logs list
+    print(payload)
     try:
         file = open("ip_port_log.txt", "a")  # open log in append mode
         file.write(f"{payload}\n")  # write the payload
@@ -100,36 +102,11 @@ def enter_subnet():
 
 
 def calculate_range(network_ip):
-    counter = 0
-    # loop through odd numbers
-    for last_octet in range(255, 0, -2): # starts at 255, goes down till 1, goes down by 2
-                                         # (255 not counted due to being broadcast addr)
-        counter += 1
-        if counter <= 5: # first 10 (5*2) ips reserved for printers and servers
-            pass
-        else:
-            full_ip = f"{network_ip}.{last_octet}"
-            if host_up(full_ip):  # if the host is up
-                print(f"Host {full_ip} is up\nPort scanning commencing")
-                print("-"*20)
-                scan_ports(network_ip, last_octet) # scan ports
-            else:
-                print(f"{full_ip} is currently down or doesn't exist")
-
-
-def host_up(full_addr: str):  # function to determine if a host is up
-    # returns true or false if the host is up or not
-    # checks if host can be pinged
-    if (
-        system(f"ping -c 1 {full_addr} >/dev/null 2>&1") == 0
-            ):  # if host responds when pinged
-        # host is up
-        return True
-    # host not responding to pings
-    return False  # assume host is down and return false
+    scan_ports("192.168.1", "103") # scan ports
 
 
 def scan_ports(network_ip, host_ip):
+    """Scans ports with given IP address"""
     target = f"{network_ip}.{host_ip}"  # defines target ip address to scan
     print(target)
     #for port in range(65535): # <-- if all ports must be scanned
@@ -142,7 +119,7 @@ def scan_ports(network_ip, host_ip):
             # returns an error indicator
             result = s.connect_ex((target,port))
             if result == 0:
-                print(f"[+] Port {port} is open")
+                #print(f"[+] Port {port} is open")
                 time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
                 log_payload = f"IP: {target}:{port} OPEN {time}"
                 log(log_payload)
@@ -164,3 +141,5 @@ if __name__ == "__main__":
 
     enter_ip()
     # enter_subnet()
+    global overwrite_ip_target
+    overwrite_ip_target = "192.168.1.103"
