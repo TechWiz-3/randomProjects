@@ -1,0 +1,1 @@
+Experimenting with the [rich python](https://github.com/Textualize/rich) library
