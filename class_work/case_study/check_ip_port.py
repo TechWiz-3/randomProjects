@@ -1,14 +1,14 @@
 # Author’s name
 # Email address 
 # Copyright (as 'Copyright Red Opal Innovations')
-# License (as 'Proprietary') 
+# License: Proprietary'
 # Last updated date
-# Version (numbered starting 1.0.1)
-# Status (set initially to 'development') 
-# An overview of the script's logic
+# v3.16.3
+# Status: Development
+# Script logic overview:
 
 """
-Global variables: logs[], overwrite_ip_target (for testing)
+Global variables: logs[]
 """
 
 # Imports
@@ -22,9 +22,12 @@ from socket import (
 )
 import pyfiglet as ascii_text
 from datetime import datetime
-import syslog
+from syslog import syslog, LOG_NOTICE
+from sys import platform as get_os
 from os import system
 import threading
+# import win32evtlogutil
+# import win32evtlog
 
 logs = []  # list used for storing logs
 
@@ -34,7 +37,7 @@ def log(payload):
     """Function for logging events as required"""
     logs.append(payload)  # adds the payload to the logs list
     print(payload)  # print to console
-    
+    # log to file
     try:
         file = open("ip_port_log.txt", "a")  # open log in append mode
         file.write(f"{payload}\n")  # write the payload
@@ -42,16 +45,33 @@ def log(payload):
     except Exception as error:  # if an error occurs
         print(f"Error occured\n{error}")  # print error
 
+    if get_os == 'darwin':  # MacOS
+        # use syslog for logging
+        try:
+            syslog(LOG_NOTICE, payload)  # log to /private/var/log/system.log
+        except PermissionError:
+            err_msg = (
+                "Sorry, you do not have the correct"\
+                "permissions to write to the system log"
+                    )
+            print(err_msg)
+    elif get_os == 'win32':  # windows OS
+        # use win32evtlog for logging
+        pass
+
+
 
 # Function for accepting a valid network IP address
 def enter_ip():
+    """Function for entering the network address"""
     netw_addr = input(
         "Enter a valid class C network IP address with the first 3 octets "
             )
     # initial IP address validity check
     try:
         if valid_ipv4(f"{netw_addr}.1"):  # if ip address is valid
-            print("IP address passed first check")  # ip address valid (broad)
+            # ip address valid but not confirmed to be a class C IP address
+            pass
     except OSError:  # if ip address not valid
         print("IP address invalid, please re-enter")  # ip address not valid
         # call the function to start again, this will repeat until a valid ip address is entered
@@ -82,26 +102,11 @@ def enter_ip():
     enter_ip()  # calls the function again
 
 
-def enter_subnet():
-    subnet = input("Enter the subnet mask in extended form: ")
-    subnet_list = subnet.split(".")  # split each octet into a list element
-    subnet_list = [int(x) for x in subnet_list]  # convert octet elements to integers
-    # define more accessible list variables
-    first_octet = subnet_list[0]; second_octet = subnet_list[1]; third_octet = subnet_list[2]; fourth_octet = subnet_list[3]
-    if (
-        first_octet == 255 and
-        second_octet == 255 and 
-        third_octet == 255 and
-        fourth_octet == 0
-    ):
-        return print("Valid subnet mask entered")
-    print(
-        "Invalid subnet mask entered, please ensure you enter the class C subnet mask"
-        )
-    enter_subnet()
-
-
 def calculate_range(network_ip):
+    """
+    Function for calculating the range of
+    IP addresses in the network address provided
+        """
     counter = 0
     # loop through odd numbers
     for last_octet in range(255, 0, -2): # starts at 255, goes down till 1, goes down by 2
@@ -135,6 +140,7 @@ def scan_ports(network_ip, host_ip):
     target = f"{network_ip}.{host_ip}"  # defines target ip address to scan
     print(target)
     #for port in range(65535): # <-- if all ports must be scanned
+    #"""add error handling if ports.txt is emptyyyy"""
     with open("ports.txt", "r") as ports:
         for port in ports:
             port = int(port)
@@ -158,4 +164,3 @@ if __name__ == "__main__":
     print(banner)
 
     enter_ip()
-    # enter_subnet()
