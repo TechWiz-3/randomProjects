@@ -3,7 +3,7 @@
 # Copyright (as 'Copyright Red Opal Innovations')
 # License: Proprietary'
 # Last updated date
-# v3.16.3
+# v3.17.0
 # Status: Development
 # Script logic overview:
 
@@ -145,19 +145,20 @@ def scan_ports(network_ip, host_ip):
         for port in ports:
             port = int(port)
             print(f"Connecting to {target}:{port}")
-            s = socket(ipv4, tcp)
-            setdefaulttimeout(1)
-            # returns an error indicator
-            result = s.connect_ex((target,port))
-            if result == 0:
-                time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
-                log_payload = f"IP: {target}:{port} OPEN {time}"
-                log(log_payload)
-            else:
-                time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
-                log_payload = f"IP: {target}:{port} CLOSED {time}"
-                log(log_payload)
-            s.close()
+            # create a socket connection with a context manager
+            with socket(ipv4, tcp) as s:
+                setdefaulttimeout(1)
+                # returns an error indicator
+                result = s.connect_ex((target,port))
+                if result == 0:
+                    time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
+                    log_payload = f"IP: {target}:{port} OPEN {time}"
+                    log(log_payload)
+                else:
+                    time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
+                    log_payload = f"IP: {target}:{port} CLOSED {time}"
+                    log(log_payload)
+                # context manager closes socket connection automatically
 
 if __name__ == "__main__":
     banner = ascii_text.figlet_format("PORT SCANNER")
