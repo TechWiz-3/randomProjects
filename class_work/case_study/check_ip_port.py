@@ -3,7 +3,7 @@
 # Copyright (as 'Copyright Red Opal Innovations')
 # License: Proprietary'
 # Last updated date
-# v3.17.0
+# v3.20.0
 # Status: Development
 # Script logic overview:
 
@@ -13,6 +13,8 @@ Global variables: logs[]
 
 # Imports
 
+from genericpath import getsize
+from multiprocessing.sharedctypes import Value
 from socket import (
     inet_aton as valid_ipv4,
     AF_INET as ipv4,
@@ -25,7 +27,7 @@ from datetime import datetime
 from syslog import syslog, LOG_NOTICE
 from sys import platform as get_os
 from os import system
-import threading
+from os.path import getsize
 # import win32evtlogutil
 # import win32evtlog
 
@@ -34,7 +36,10 @@ logs = []  # list used for storing logs
 
 # Function for writing to log file
 def log(payload):
-    """Function for logging events as required"""
+    """
+    Function for logging events to log file,
+    console and event viewer/system log
+        """
     logs.append(payload)  # adds the payload to the logs list
     print(payload)  # print to console
     # log to file
@@ -55,6 +60,7 @@ def log(payload):
                 "permissions to write to the system log"
                     )
             print(err_msg)
+
     elif get_os == 'win32':  # windows OS
         # use win32evtlog for logging
         pass
@@ -118,15 +124,18 @@ def calculate_range(network_ip):
             full_ip = f"{network_ip}.{last_octet}"
             if host_up(full_ip):  # if the host is up
                 print(f"Host {full_ip} is up\nPort scanning commencing")
-                print("-"*20)
+                print("-"*40)
                 scan_ports(network_ip, last_octet) # scan ports
             else:
                 print(f"{full_ip} is currently down or doesn't exist")
 
 
-def host_up(full_addr: str):  # function to determine if a host is up
-    # returns true or false if the host is up or not
-    # checks if host can be pinged
+def host_up(full_addr: str):
+    """
+    Function to determine if a host is up
+    Returns true or false if the host is up or not
+    Checks if host can be pinged
+        """ 
     if (
         system(f"ping -c 1 {full_addr} >/dev/null 2>&1") == 0
             ):  # if host responds when pinged
@@ -137,28 +146,40 @@ def host_up(full_addr: str):  # function to determine if a host is up
 
 
 def scan_ports(network_ip, host_ip):
+    """Scans the specified ports of a provided host"""
     target = f"{network_ip}.{host_ip}"  # defines target ip address to scan
     print(target)
     #for port in range(65535): # <-- if all ports must be scanned
     #"""add error handling if ports.txt is emptyyyy"""
-    with open("ports.txt", "r") as ports:
-        for port in ports:
-            port = int(port)
-            print(f"Connecting to {target}:{port}")
-            # create a socket connection with a context manager
-            with socket(ipv4, tcp) as s:
-                setdefaulttimeout(1)
-                # returns an error indicator
-                result = s.connect_ex((target,port))
-                if result == 0:
-                    time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
-                    log_payload = f"IP: {target}:{port} OPEN {time}"
-                    log(log_payload)
-                else:
-                    time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
-                    log_payload = f"IP: {target}:{port} CLOSED {time}"
-                    log(log_payload)
-                # context manager closes socket connection automatically
+    try:
+        with open("ports.txt", "r") as ports:
+            if getsize('ports.txt') == 0:
+                print("Ports file appears to be empty")
+            else:
+                for port in ports:
+                    try:
+                        port = int(port)
+                    except ValueError:
+                        print(f"The following port entry is not a number: {port}")
+                        continue  # skips the line with the port number error and moves on
+                    else:  # if no error occurs
+                        print(f"Connecting to {target}:{port}")
+                        # create a socket connection with a context manager
+                        with socket(ipv4, tcp) as s:
+                            setdefaulttimeout(1)
+                            # returns an error indicator
+                            result = s.connect_ex((target,port))
+                            if result == 0:
+                                time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
+                                log_payload = f"IP: {target}:{port} OPEN {time}"
+                                log(log_payload)
+                            else:
+                                time = datetime.now().strftime("%d-%b-%Y (%H:%M:%S)")
+                                log_payload = f"IP: {target}:{port} CLOSED {time}"
+                                log(log_payload)
+                            # context manager closes socket connection automatically
+    except FileNotFoundError:
+        print("Ports file does not exist")
 
 if __name__ == "__main__":
     banner = ascii_text.figlet_format("PORT SCANNER")
