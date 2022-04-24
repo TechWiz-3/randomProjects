@@ -8,7 +8,7 @@
 # Script logic overview:
 
 """
-Global variables: logs[]
+Global variables: logs[], ports_file_path
 """
 
 # Imports
@@ -32,6 +32,8 @@ from os.path import getsize
 # import win32evtlog
 
 logs = []  # list used for storing logs
+# variable can be changed to include filepath if ports.txt is not in working dir
+ports_file_path = "ports.txt"
 
 
 # Function for writing to log file
@@ -64,8 +66,6 @@ def log(payload):
     elif get_os == 'win32':  # windows OS
         # use win32evtlog for logging
         pass
-
-
 
 # Function for accepting a valid network IP address
 def enter_ip():
@@ -147,12 +147,13 @@ def host_up(full_addr: str):
 
 def scan_ports(network_ip, host_ip):
     """Scans the specified ports of a provided host"""
+    global ports_file_path
     target = f"{network_ip}.{host_ip}"  # defines target ip address to scan
     print(target)
     #for port in range(65535): # <-- if all ports must be scanned
-    #"""add error handling if ports.txt is emptyyyy"""
     try:
-        with open("ports.txt", "r") as ports:
+        print("before opening", ports_file_path)
+        with open(ports_file_path, "r") as ports:
             if getsize('ports.txt') == 0:
                 print("Ports file appears to be empty")
             else:
@@ -179,7 +180,12 @@ def scan_ports(network_ip, host_ip):
                                 log(log_payload)
                             # context manager closes socket connection automatically
     except FileNotFoundError:
-        print("Ports file does not exist")
+        print("Ports file does not exist or it isn't in the current working directory")
+        usr_input = input("If ports.txt exists but is in another directory, would you like to specify where it can be found? [y/n] ")
+        if usr_input.lower() == "y":
+            ports_file_path = input("Enter filepath to ports.txt from root: ")
+            print("exception for file not found", ports_file_path)
+            scan_ports(network_ip, host_ip)
 
 if __name__ == "__main__":
     banner = ascii_text.figlet_format("PORT SCANNER")
