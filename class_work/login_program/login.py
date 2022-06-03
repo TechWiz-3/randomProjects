@@ -30,6 +30,7 @@ def menu():
 
 
 def login():
+    """Login handler"""
     usr = input("Enter your username: ")
     passwd = input("Enter your password: ")
     with open("accounts.txt", "r") as accounts:  # open the accounts file
@@ -58,7 +59,7 @@ def login():
                 continue  # continue in the for loop scanning the accounts document
 
 def register():
-    """allows users to register a new account"""
+    """Allows users to register a new account"""
     cont = input("You will be prompted to register a new account, do you wish to continue? [y/n] ")
     if cont.lower() == "y":
         name = input("Enter your new account's name: ")
@@ -101,7 +102,7 @@ def register():
 
 
 def rand_passwd(typ: str, length: int) -> str:
-    """generates a fully random password and returns it, used in register function"""
+    """Generates a fully random password and returns it, used in register function"""
     password = ""
     if typ == "char":  # use only characters
         chars = ascii_letters
@@ -126,7 +127,7 @@ def rand_passwd(typ: str, length: int) -> str:
     return password
 
 def create_acc(name: str, passwd: str):
-    """function that writes to the accounts file for new account entries, used in regiister function"""
+    """Function that writes to the accounts file for new account entries, used in regiister function"""
     try:
         with open("accounts.txt", "a") as accounts:
             new_account = f"{name} {passwd}\n"
@@ -142,7 +143,7 @@ def create_acc(name: str, passwd: str):
 
 
 def view_accs():
-    """prints account information"""
+    """Prints account information"""
     line_count = 0
     try:
         with open("accounts.txt", "r") as accounts:
@@ -154,9 +155,10 @@ def view_accs():
         print("File not found in this directory")
 
 def menu_loop():
-    """function that is called to run the select menu"""
+    """Function that is called to run the select menu"""
     while True:  # broken by control C or pressing 4 for exit
-            option = menu()
+            option = menu()  # get select menu respoonse
+            # run appropriate function based on user response
             if option == "login":
                 login()
             elif option == "register":
