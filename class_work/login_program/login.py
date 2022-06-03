@@ -139,7 +139,6 @@ def create_acc(name: str, passwd: str):
     else:
         print("New account created successfully")
         sleep(2)
-        pass
 
 
 def view_accs():
