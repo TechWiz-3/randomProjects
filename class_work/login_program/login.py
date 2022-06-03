@@ -1,6 +1,7 @@
 # Created by Zac
 # 31/05/2022
-# Login program with numerous options
+# Login program with numerous including registering
+# new accounts and viewing existing account information
 
 # General Imports
 from sys import exit  # method to exit script
@@ -97,7 +98,6 @@ def register():
                 create_acc(name, password)  # log account
     else:
         pass
-        menu()  # loop back to the select menu
 
 
 def rand_passwd(typ: str, length: int) -> str:
@@ -139,7 +139,6 @@ def create_acc(name: str, passwd: str):
         print("New account created successfully")
         sleep(2)
         pass
-        menu_loop()
 
 
 def view_accs():
