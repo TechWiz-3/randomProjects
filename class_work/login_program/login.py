@@ -110,8 +110,8 @@ def register():
                 else:
                     print("Type not recognised, try agan")
                 create_acc(name, password)  # log account
-    else:
-        pass
+    else:  # if the user does not want to proceed
+        print("Register function exiting\n\n")
 
 
 def rand_passwd(typ: str, length: int) -> str:
