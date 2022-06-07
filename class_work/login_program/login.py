@@ -34,7 +34,7 @@ def menu():
             sleep(2)
             return exit()  # exit the program
         else:  # if number is not recognised
-            print("Number not recognised, please try again")
+            print("Number not recognised, please try again\n\n")
             return None  # when the function returns none the while loop will ignore the menu results, run again and display the menu again
 
 
@@ -48,7 +48,7 @@ def login():
             # compare provided login to the login program is looping through
             if usr == login_passwd[0]:
                 if passwd == login_passwd[1]:
-                    print("Login successful, welcome")
+                    print("Login successful, welcome\n\n")
                     return
                 else:  # wrong password
                     print("Password wrong, please try again.")
@@ -63,7 +63,7 @@ def login():
                         # current version returns to menu loop
                         return None
                     else:  # password entry was successful
-                        print("Login successful, welcome")
+                        print("Login successful, welcome\n\n")
                         return
             else:
                 continue  # continue in the for loop scanning the accounts document
@@ -150,7 +150,7 @@ def create_acc(name: str, passwd: str):
     except Exception as error:
         print("Error occured: ", error)
     else:
-        print("New account created successfully")
+        print("New account created successfully\n\n")
         sleep(2)
 
 
