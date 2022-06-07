@@ -13,20 +13,29 @@ from random import seed, choice  # seed initialises the random no generator,  ch
 
 def menu():
     """Displays select menu and returns users choice"""
-    menu = "1) Login\n2) Register\n3) View Accounts\n4) Exit\n"
-    option = int(input(menu))  # prints memu and gets user input
-    # depending on user input, the function will return a string describing
-    # what the user wishes to do
-    print("\n") # add some space
-    if option == 1:  # option 1 in select menu
-        return "login"
-    elif option == 2:  # option 2 in select menu
-        return "register"
-    elif option == 3:
-        return "view"
-    elif option == 4:  # option 4 in select menu
-        sleep(2)
-        return exit()  # exit the program
+    menu_display = "1) Login\n2) Register\n3) View Accounts\n4) Exit\n"
+    try:
+        option = int(input(menu_display))  # prints memu and gets user input
+    except ValueError:  # non integer entered
+        print("Non-valid option chosen, please try again\n\n")
+        # allow the user to try again and then exit then prevent the rest of
+        # the functoin from runnng
+    else:  # if a valid integer is inputted
+        # depending on user input, the function will return a string describing
+        # what the user wishes to do
+        print("\n") # add some space
+        if option == 1:  # option 1 in select menu
+            return "login"
+        elif option == 2:  # option 2 in select menu
+            return "register"
+        elif option == 3:
+            return "view"
+        elif option == 4:  # option 4 in select menu
+            sleep(2)
+            return exit()  # exit the program
+        else:  # if number is not recognised
+            print("Number not recognised, please try again")
+            return None  # when the function returns none the while loop will ignore the menu results, run again and display the menu again
 
 
 def login():
@@ -39,7 +48,7 @@ def login():
             # compare provided login to the login program is looping through
             if usr == login_passwd[0]:
                 if passwd == login_passwd[1]:
-                    print("Welcome")
+                    print("Login successful, welcome")
                     return
                 else:  # wrong password
                     print("Password wrong, please try again.")
@@ -49,14 +58,18 @@ def login():
                         print("Password wrong, please try again (press X to quit).")
                         passwd = input("Enter your password: ")
                     if passwd.lower() == "x":  # user exited password loop
-                        print("Exiting")
-                        sleep(2)
-                        exit()
+                        print("Exiting\n\n")
+                        # previous version exited entire program
+                        # current version returns to menu loop
+                        return None
                     else:  # password entry was successful
-                        print("Welcome")
+                        print("Login successful, welcome")
                         return
             else:
                 continue  # continue in the for loop scanning the accounts document
+        # if this block runs, it means that the login was wrong as the program
+        # has not already returned or exited
+        print("Account name does not exist, exiting login function\n\n")
 
 def register():
     """Allows users to register a new account"""
@@ -164,6 +177,8 @@ def menu_loop():
                 register()
             elif option == "view":
                 view_accs()
+            # if the menu function returns None then the menu will repeat
+            # itself without running any other functions
 
 if __name__ == "__main__":
     print("Welcome to your login program, enter the number corresponding to the action list below you would like to take\n") 
