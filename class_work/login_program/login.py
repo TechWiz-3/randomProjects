@@ -92,6 +92,8 @@ def register():
         elif password_type.lower() == "b":
             # auto generate a password
             type_recognised = False
+            # in the future, add a type recognised variable for the length
+            # inputted by the user
             while type_recognised == False:
                 choose_type = input("All characters [a]\nAll numbers [b]\nAll special characters[c]\nCombination[d]\nFrom the options above, list the password type you wish to have generated: ")
                 choose_length = int(input("Enter the password length you require (4-20) "))
@@ -150,7 +152,7 @@ def create_acc(name: str, passwd: str):
     except Exception as error:
         print("Error occured: ", error)
     else:
-        print("New account created successfully\n\n")
+        print(f"New account created successfully with the following credentials\nUsername:{name}\nPassword: {passwd}\n\n")
         sleep(2)
 
 
