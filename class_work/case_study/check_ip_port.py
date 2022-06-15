@@ -1,11 +1,13 @@
-# Author’s name
-# Email address 
-# Copyright (as 'Copyright Red Opal Innovations')
-# License: Proprietary'
-# Last updated date
-# v3.20.0
-# Status: Development
-# Script logic overview:
+# Name: Zac
+# Email: zac@gelos.com
+# Copyright Gelos Enterprises
+# License: Proprietary
+# Last modified: 14/06/2022
+# Version: v3.22.4
+# Status: Completed, waiting reviewal
+# Script logic overview: if __name__ == "__main__" statement which runs the
+# enter_ip function, functions run eachother inter-dependently to complete
+# different tasks
 
 """
 Global variables: logs[]
@@ -13,8 +15,6 @@ Global variables: logs[]
 
 # Imports
 
-from genericpath import getsize
-from multiprocessing.sharedctypes import Value
 from socket import (
     inet_aton as valid_ipv4,
     AF_INET as ipv4,
@@ -56,7 +56,7 @@ def log(payload):
             syslog(LOG_NOTICE, payload)  # log to /private/var/log/system.log
         except PermissionError:
             err_msg = (
-                "Sorry, you do not have the correct"\
+                "Sorry, you do not have the correct"
                 "permissions to write to the system log"
                     )
             print(err_msg)
@@ -64,6 +64,7 @@ def log(payload):
     elif get_os == 'win32':  # windows OS
         # use win32evtlog for logging
         pass
+
 
 # Function for accepting a valid network IP address
 def enter_ip():
@@ -79,7 +80,7 @@ def enter_ip():
     except OSError:  # if ip address not valid
         print("IP address invalid, please re-enter")  # ip address not valid
         # call the function to start again, this will repeat until a valid ip address is entered
-        enter_ip()
+        return enter_ip()
 
     # secondary, more specific ip address check
     list_netw_addr = netw_addr.split(".")  # splits each octet into a list variable
@@ -100,10 +101,10 @@ def enter_ip():
             return calculate_range(f"{first_octet}.{second_octet}.{third_octet}")
 
         print("IP address range not valid, try again") # notifies user
-        enter_ip()  # calls the function again
+        return enter_ip()  # calls the function again
     # runs if wrong number of octets entered
     print("You haven't entered the correct number of octets, try again") # notifies user
-    enter_ip()  # calls the function again
+    return enter_ip()  # calls the function again
 
 
 def calculate_range(network_ip):
@@ -116,14 +117,14 @@ def calculate_range(network_ip):
     for last_octet in range(255, 0, -2): # starts at 255, goes down till 1, goes down by 2
                                          # (255 not counted due to being broadcast addr)
         counter += 1
-        if counter <= 5: # first 10 (5*2) ips reserved for printers and servers
+        if counter <= 5:  # first 10 (5*2) ips reserved for printers and servers
             pass
         else:
             full_ip = f"{network_ip}.{last_octet}"
             if host_up(full_ip):  # if the host is up
                 print(f"Host {full_ip} is up\nPort scanning commencing")
                 print("-"*40)
-                scan_ports(network_ip, last_octet) # scan ports
+                scan_ports(network_ip, last_octet)  # scan ports
             else:
                 print(f"{full_ip} is currently down or doesn't exist")
 
@@ -133,7 +134,7 @@ def host_up(full_addr: str):
     Function to determine if a host is up
     Returns true or false if the host is up or not
     Checks if host can be pinged
-        """ 
+        """
     if (
         system(f"ping -c 1 {full_addr} >/dev/null 2>&1") == 0
             ):  # if host responds when pinged
@@ -183,3 +184,4 @@ if __name__ == "__main__":
     print(banner)
 
     enter_ip()
+
