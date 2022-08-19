@@ -14,6 +14,7 @@ def test():
         dic[name[n]] += sub5[n]
     return dic
 counter = 0
+print(test())
 for i in sorted(test(),reverse=True):
     print(i)
     counter +=1
